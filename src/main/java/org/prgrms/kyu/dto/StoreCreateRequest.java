@@ -1,7 +1,6 @@
 package org.prgrms.kyu.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +16,6 @@ public class StoreCreateRequest {
   String telephone;
   String description;
   String location;
-  Long userId;
 
   public Store convertToStore(User user){
     return Store.builder()

@@ -1,25 +1,7 @@
 package org.prgrms.kyu.controller.api;
 
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,17 +9,32 @@ import org.mockito.ArgumentMatchers;
 import org.prgrms.kyu.dto.JoinRequest;
 import org.prgrms.kyu.dto.StoreCreateRequest;
 import org.prgrms.kyu.dto.StoreFindResponse;
+import org.prgrms.kyu.dto.UserInfo;
+import org.prgrms.kyu.entity.User;
 import org.prgrms.kyu.repository.UserRepository;
+import org.prgrms.kyu.service.SecurityService;
 import org.prgrms.kyu.service.StoreService;
 import org.prgrms.kyu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureRestDocs
 @WebMvcTest(StoreRestController.class)
@@ -58,6 +55,8 @@ class StoreRestControllerTest {
   @MockBean
   UserRepository userRepository;
 
+  @MockBean
+  SecurityService securityService;
 
   @AfterEach
   public void cleanUp(){
@@ -74,7 +73,7 @@ class StoreRestControllerTest {
   @BeforeEach
   public void userSetUp(){
     //given
-    userId = 1L;
+    this.userId = 1L;
     form = new JoinRequest(
         "test1@test.com",
         "1234",
@@ -88,16 +87,14 @@ class StoreRestControllerTest {
             "momstouch",
             "01011112222",
             "i am momstouch.",
-            "Seoul",
-            userId);
+            "Seoul");
 
     storeCreateRequest2 =
         new StoreCreateRequest(
             "momstouch2",
             "01011113333",
             "i am momstouch2.",
-            "Seoul",
-            userId);
+            "Seoul");
 
     given(userService.join(ArgumentMatchers.any(JoinRequest.class))).willReturn(1L);
     userService.join(form);
@@ -107,9 +104,12 @@ class StoreRestControllerTest {
 
   @Test
   @DisplayName("음식점을 생성할 수 있다.")
+  @WithMockUser(roles = "STORE_OWNER")
   public void saveStoreTest() throws Exception {
     //given //when
-    given(storeService.save(ArgumentMatchers.any(StoreCreateRequest.class))).willReturn(1L);
+    given(this.userService.getUser(ArgumentMatchers.anyString())).willReturn(new UserInfo(new User(this.form)));
+    given(this.securityService.isAuthenticated()).willReturn(true);
+    given(this.storeService.save(ArgumentMatchers.any(StoreCreateRequest.class), eq(this.userId))).willReturn(1L);
 
     //then
     mockMvc.perform(post("/api/v1/stores")
@@ -124,8 +124,7 @@ class StoreRestControllerTest {
                 fieldWithPath("name").type(JsonFieldType.STRING).description("name"),
                 fieldWithPath("telephone").type(JsonFieldType.STRING).description("telephone"),
                 fieldWithPath("description").type(JsonFieldType.STRING).description("description"),
-                fieldWithPath("location").type(JsonFieldType.STRING).description("location"),
-                fieldWithPath("userId").type(JsonFieldType.NUMBER).description("userId")
+                fieldWithPath("location").type(JsonFieldType.STRING).description("location")
             ),
             responseFields(
                 fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태코드"),
@@ -137,12 +136,13 @@ class StoreRestControllerTest {
 
   @Test
   @DisplayName("모든 음식점을 찾을 수 있다.")
+  @WithMockUser
   public void getAllStoreTest() throws Exception {
     //given
-    given(storeService.save(ArgumentMatchers.any(StoreCreateRequest.class))).willReturn(1L);
-    Long storeId1 = storeService.save(storeCreateRequest);
-    given(storeService.save(ArgumentMatchers.any(StoreCreateRequest.class))).willReturn(2L);
-    Long storeId2 = storeService.save(storeCreateRequest2);
+    given(storeService.save(ArgumentMatchers.any(StoreCreateRequest.class), eq(this.userId))).willReturn(1L);
+    Long storeId1 = storeService.save(storeCreateRequest, this.userId);
+    given(storeService.save(ArgumentMatchers.any(StoreCreateRequest.class), eq(this.userId))).willReturn(2L);
+    Long storeId2 = storeService.save(storeCreateRequest2, this.userId);
 
     List<StoreFindResponse> list = List.of(
         new StoreFindResponse(
@@ -190,10 +190,11 @@ class StoreRestControllerTest {
 
   @Test
   @DisplayName("id로 가게 정보를 검색할 수 있다.")
+  @WithMockUser
   public void getOneStoreTest() throws Exception {
     //given
-    given(storeService.save(ArgumentMatchers.any(StoreCreateRequest.class))).willReturn(1L);
-    Long storeId = storeService.save(storeCreateRequest);
+    given(storeService.save(ArgumentMatchers.any(StoreCreateRequest.class), eq(this.userId))).willReturn(1L);
+    Long storeId = storeService.save(storeCreateRequest, this.userId);
 
     StoreFindResponse storeFindResponse = new StoreFindResponse(
         storeId,

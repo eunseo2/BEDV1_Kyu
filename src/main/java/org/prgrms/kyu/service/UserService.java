@@ -6,6 +6,7 @@ import org.prgrms.kyu.dto.JoinRequest;
 import org.prgrms.kyu.dto.LoginRequest;
 import org.prgrms.kyu.dto.UserInfo;
 import org.prgrms.kyu.entity.User;
+import org.prgrms.kyu.entity.UserType;
 import org.prgrms.kyu.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -51,8 +52,11 @@ public class UserService {
         return new UserInfo(repository.getUserByEmail(email));
     }
 
-    public User findById(Long id) throws AuthenticationException {
-    return repository.findById(id)
-        .orElseThrow(() -> new AuthenticationException("사용자 정보를 찾을 수 없습니다."));
+    public User findById(Long id){
+        return repository.getById(id);
+  }
+
+  public UserType getUserType(String email){
+        return repository.getUserByEmail(email).getType();
   }
 }
