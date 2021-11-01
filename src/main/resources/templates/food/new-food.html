@@ -24,7 +24,7 @@
         <button type="button" class="btn btn-primary" id="btn-save">저장</button>
     </form>
 
-    <form method="POST" class="form-signin" th:object="${foodForm}" th:action="@{/foods}">
+    <form method="POST" class="form-signin" th:object="${foodForm}" th:action="@{'/stores/'+${storeId}+'/foods'}">
         <h2 class="form-signin-heading">가게 메뉴 등록</h2><br>
         <div class="form-group">
             <input type="text" th:field="*{name}" class="form-control" placeholder="Food Name"

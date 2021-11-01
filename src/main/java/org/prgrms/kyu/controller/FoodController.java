@@ -27,16 +27,17 @@ public class FoodController {
     private final UserService userService;
     private final S3Uploader s3Uploader;
 
-    @GetMapping("new-food")
-    public String newFoodPage(Model model) {
+    @PostMapping("/stores/{storeId}/new-food")
+    public String newFoodPage(@PathVariable("storeId") Long storeId, Model model) {
         model.addAttribute("foodForm", new FoodRequest());
+        model.addAttribute("storeId", storeId);
         return "food/new-food";
     }
 
-    @PostMapping("/foods")
-    public String newFood(@ModelAttribute("foodForm") FoodRequest request) {
-        foodService.save(request, 6L);
-        return "redirect:/user/myShop";
+    @PostMapping("/stores/{storeId}/foods")
+    public String newFood(@PathVariable("storeId") Long storeId, @ModelAttribute("foodForm") FoodRequest request) {
+        foodService.save(request, storeId);
+        return "redirect:/stores/" + storeId;
     }
 
     @GetMapping("/stores/{storeId}/foods")
