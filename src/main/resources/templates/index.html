@@ -63,6 +63,9 @@
                                 <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
                                 <small th:text="${store.description}">Earth</small>
                             </li>
+                            <li class="d-flex align-items-center me-3">
+                                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+                                    <a class="btn btn-outline-info" th:href="@{'/stores/'+${store.id}}">조회</a>
                             </li>
                         </ul>
                     </div>
