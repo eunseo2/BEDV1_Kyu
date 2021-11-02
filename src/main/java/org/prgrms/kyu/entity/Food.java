@@ -4,16 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 @Entity
@@ -42,14 +33,15 @@ public class Food extends BaseTimeEntity {
 
 
     @Builder
-    public Food(String name, String description, Integer price) {
+    public Food(String name, String description, Integer price, String image) {
         this.name = name;
         this.description = description;
+        this.image = image;
         this.price = price;
+        this.image = image;
     }
 
     public void update(Store store) {
         this.store = store;
     }
-
 }

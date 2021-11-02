@@ -2,10 +2,14 @@ package org.prgrms.kyu.service;
 
 import lombok.RequiredArgsConstructor;
 import org.prgrms.kyu.dto.FoodRequest;
+import org.prgrms.kyu.dto.FoodResponse;
 import org.prgrms.kyu.repository.FoodRepository;
 import org.prgrms.kyu.repository.StoreRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,4 +26,8 @@ public class FoodService {
         return food.getId();
     }
 
+    public List<FoodResponse> getFoodList(Long storeId) {
+        return foodRepository.findAllByStoreIdOrderById(storeId)
+                .stream().map(FoodResponse::new).collect(Collectors.toList());
+    }
 }

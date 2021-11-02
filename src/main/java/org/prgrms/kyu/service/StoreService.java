@@ -1,16 +1,16 @@
 package org.prgrms.kyu.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import javassist.NotFoundException;
-import javax.naming.AuthenticationException;
 import lombok.RequiredArgsConstructor;
 import org.prgrms.kyu.dto.StoreCreateRequest;
 import org.prgrms.kyu.dto.StoreFindResponse;
-import org.prgrms.kyu.entity.Store;
 import org.prgrms.kyu.repository.StoreRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.naming.AuthenticationException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,12 +46,10 @@ public class StoreService {
   }
 
   @Transactional
-  public Long save(StoreCreateRequest storeCreateRequest) throws AuthenticationException {
+  public Long save(StoreCreateRequest storeCreateRequest, Long userId) throws AuthenticationException {
     return repository.save(
             storeCreateRequest.convertToStore(
-                userService.findById(
-                    storeCreateRequest.getUserId())))
-        .getId();
+                userService.findById(userId))).getId();
   }
 
   @Transactional
