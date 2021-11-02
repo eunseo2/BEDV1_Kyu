@@ -27,12 +27,12 @@
     <form method="POST" class="form-signin" th:object="${foodForm}" th:action="@{'/stores/'+${storeId}+'/foods'}">
         <h2 class="form-signin-heading">가게 메뉴 등록</h2><br>
         <div class="form-group">
-            <input type="text" th:field="*{name}" class="form-control" placeholder="Food Name"
+            <input type="text" th:field="*{name}" class="form-control" placeholder="name"
                    autofocus="true">
         </div>
 
         <div class="form-group">
-            <input type="text" th:field="*{description}" class="form-control" placeholder="Food Description"
+            <input type="text" th:field="*{description}" class="form-control" placeholder="description"
                    autofocus="true">
         </div>
 
@@ -42,7 +42,7 @@
         </div>
 
         <div class="form-group">
-            <input type="number" th:field="*{price}" class="form-control" placeholder="Food Price"
+            <input type="number" th:field="*{price}" class="form-control" placeholder="price"
                    autofocus="true">
         </div>
 
