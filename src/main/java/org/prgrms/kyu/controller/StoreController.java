@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 
 
-import org.prgrms.kyu.dto.StoreCreateRequest;
+import org.prgrms.kyu.dto.StoreRequest;
 import org.prgrms.kyu.dto.UserInfo;
 import org.prgrms.kyu.entity.UserType;
 
@@ -51,7 +51,7 @@ public class StoreController {
     UserType userType = userService.getUserType(
         ((UserDetails) authentication.getPrincipal()).getUsername());
     if(userType.equals(UserType.STORE_OWNER)){
-      model.addAttribute("storeForm", new StoreCreateRequest());
+      model.addAttribute("storeForm", new StoreRequest());
       model.addAttribute("userInfo",
           userService.getUser(((UserDetails) authentication.getPrincipal()).getUsername()));
 
@@ -82,12 +82,12 @@ public class StoreController {
 
 
   @PostMapping("/stores")
-  public String signUp(@ModelAttribute("storeForm") StoreCreateRequest storeCreateRequest,
+  public String signUp(@ModelAttribute("storeForm") StoreRequest storeRequest,
                        Authentication authentication)
       throws AuthenticationException {
     if (!securityService.isAuthenticated()) throw new AuthenticationException();
     final UserInfo userInfo = userService.getUser(authentication.getName());
-    storeService.save(storeCreateRequest, userInfo.getId());
+    storeService.save(storeRequest, userInfo.getId());
     return "redirect:/";
   }
 

@@ -7,8 +7,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.prgrms.kyu.dto.JoinRequest;
-import org.prgrms.kyu.dto.StoreCreateRequest;
-import org.prgrms.kyu.dto.StoreFindResponse;
+import org.prgrms.kyu.dto.StoreRequest;
+import org.prgrms.kyu.dto.StoreResponse;
 import org.prgrms.kyu.dto.UserInfo;
 import org.prgrms.kyu.entity.User;
 import org.prgrms.kyu.repository.UserRepository;
@@ -67,8 +67,8 @@ class StoreRestControllerTest {
 
   Long userId;
   JoinRequest form;
-  StoreCreateRequest storeCreateRequest;
-  StoreCreateRequest storeCreateRequest2;
+  StoreRequest storeRequest;
+  StoreRequest storeRequest2;
 
   @BeforeEach
   public void userSetUp(){
@@ -82,15 +82,15 @@ class StoreRestControllerTest {
         "Seoul",
         "STORE_OWNER");
 
-    storeCreateRequest =
-        new StoreCreateRequest(
+    storeRequest =
+        new StoreRequest(
             "momstouch",
             "01011112222",
             "i am momstouch.",
             "Seoul");
 
-    storeCreateRequest2 =
-        new StoreCreateRequest(
+    storeRequest2 =
+        new StoreRequest(
             "momstouch2",
             "01011113333",
             "i am momstouch2.",
@@ -109,12 +109,12 @@ class StoreRestControllerTest {
     //given //when
     given(this.userService.getUser(ArgumentMatchers.anyString())).willReturn(new UserInfo(new User(this.form)));
     given(this.securityService.isAuthenticated()).willReturn(true);
-    given(this.storeService.save(ArgumentMatchers.any(StoreCreateRequest.class), eq(this.userId))).willReturn(1L);
+    given(this.storeService.save(ArgumentMatchers.any(StoreRequest.class), eq(this.userId))).willReturn(1L);
 
     //then
     mockMvc.perform(post("/api/v1/stores")
           .contentType(MediaType.APPLICATION_JSON)
-          .content(objectMapper.writeValueAsString(storeCreateRequest)))
+          .content(objectMapper.writeValueAsString(storeRequest)))
         .andExpect(status().isOk())
         .andDo(print())
         .andDo(document("store-save",
@@ -139,25 +139,25 @@ class StoreRestControllerTest {
   @WithMockUser
   public void getAllStoreTest() throws Exception {
     //given
-    given(storeService.save(ArgumentMatchers.any(StoreCreateRequest.class), eq(this.userId))).willReturn(1L);
-    Long storeId1 = storeService.save(storeCreateRequest, this.userId);
-    given(storeService.save(ArgumentMatchers.any(StoreCreateRequest.class), eq(this.userId))).willReturn(2L);
-    Long storeId2 = storeService.save(storeCreateRequest2, this.userId);
+    given(storeService.save(ArgumentMatchers.any(StoreRequest.class), eq(this.userId))).willReturn(1L);
+    Long storeId1 = storeService.save(storeRequest, this.userId);
+    given(storeService.save(ArgumentMatchers.any(StoreRequest.class), eq(this.userId))).willReturn(2L);
+    Long storeId2 = storeService.save(storeRequest2, this.userId);
 
-    List<StoreFindResponse> list = List.of(
-        new StoreFindResponse(
+    List<StoreResponse> list = List.of(
+        new StoreResponse(
             storeId1,
-            storeCreateRequest.getName(),
-            storeCreateRequest.getTelephone(),
-            storeCreateRequest.getDescription(),
-            storeCreateRequest.getLocation()
+            storeRequest.getName(),
+            storeRequest.getTelephone(),
+            storeRequest.getDescription(),
+            storeRequest.getLocation()
         ),
-        new StoreFindResponse(
+        new StoreResponse(
             storeId2,
-            storeCreateRequest2.getName(),
-            storeCreateRequest2.getTelephone(),
-            storeCreateRequest2.getDescription(),
-            storeCreateRequest2.getLocation()
+            storeRequest2.getName(),
+            storeRequest2.getTelephone(),
+            storeRequest2.getDescription(),
+            storeRequest2.getLocation()
         ));
 
 
@@ -193,19 +193,19 @@ class StoreRestControllerTest {
   @WithMockUser
   public void getOneStoreTest() throws Exception {
     //given
-    given(storeService.save(ArgumentMatchers.any(StoreCreateRequest.class), eq(this.userId))).willReturn(1L);
-    Long storeId = storeService.save(storeCreateRequest, this.userId);
+    given(storeService.save(ArgumentMatchers.any(StoreRequest.class), eq(this.userId))).willReturn(1L);
+    Long storeId = storeService.save(storeRequest, this.userId);
 
-    StoreFindResponse storeFindResponse = new StoreFindResponse(
+    StoreResponse storeResponse = new StoreResponse(
         storeId,
-        storeCreateRequest.getName(),
-        storeCreateRequest.getTelephone(),
-        storeCreateRequest.getDescription(),
-        storeCreateRequest.getLocation()
+        storeRequest.getName(),
+        storeRequest.getTelephone(),
+        storeRequest.getDescription(),
+        storeRequest.getLocation()
     );
 
     //when
-    given(storeService.findById(ArgumentMatchers.any(Long.class))).willReturn(storeFindResponse);
+    given(storeService.findById(ArgumentMatchers.any(Long.class))).willReturn(storeResponse);
 
     //then
     mockMvc.perform(get("/api/v1/stores/{id}",storeId)
