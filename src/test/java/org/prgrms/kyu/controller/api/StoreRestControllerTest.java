@@ -136,7 +136,6 @@ class StoreRestControllerTest {
 
   @Test
   @DisplayName("모든 음식점을 찾을 수 있다.")
-  @WithMockUser
   public void getAllStoreTest() throws Exception {
     //given
     given(storeService.save(ArgumentMatchers.any(StoreCreateRequest.class), eq(this.userId))).willReturn(1L);
@@ -190,7 +189,7 @@ class StoreRestControllerTest {
 
   @Test
   @DisplayName("id로 가게 정보를 검색할 수 있다.")
-  @WithMockUser
+  @WithMockUser(roles = "STORE_OWNER")
   public void getOneStoreTest() throws Exception {
     //given
     given(storeService.save(ArgumentMatchers.any(StoreCreateRequest.class), eq(this.userId))).willReturn(1L);
