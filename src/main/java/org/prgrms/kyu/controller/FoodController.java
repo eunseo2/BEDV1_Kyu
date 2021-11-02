@@ -30,7 +30,6 @@ public class FoodController {
     @PostMapping("/stores/{storeId}/new-food")
     public String newFoodPage(@PathVariable("storeId") Long storeId, Model model) {
         model.addAttribute("foodForm", new FoodRequest());
-        model.addAttribute("storeId", storeId);
         return "food/new-food";
     }
 
