@@ -15,13 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.prgrms.kyu.dto.StoreFindResponse;
 
 @Getter
 @Entity
@@ -40,6 +34,8 @@ public class Store extends BaseTimeEntity {
 
   @Column(nullable = false, length = 11)
   private String telephone;
+
+  private String image;
 
   @Lob
   private String description;

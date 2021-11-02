@@ -10,18 +10,20 @@ import org.prgrms.kyu.entity.Store;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StoreFindResponse {
+public class StoreResponse {
   Long id;
   String name;
   String telephone;
   String description;
+  String image;
   String location;
 
-  public StoreFindResponse(Store store) {
+  public StoreResponse(Store store) {
        this.id = store.getId();
        this.name = store.getName();
        this.telephone = store.getTelephone();
        this.description = store.getDescription();
+       this.image = store.getImage();
        this.location = store.getLocation();
   }
 
