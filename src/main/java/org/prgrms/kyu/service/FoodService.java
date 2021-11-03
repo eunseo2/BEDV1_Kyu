@@ -3,6 +3,7 @@ package org.prgrms.kyu.service;
 import lombok.RequiredArgsConstructor;
 import org.prgrms.kyu.dto.FoodRequest;
 import org.prgrms.kyu.dto.FoodResponse;
+import org.prgrms.kyu.entity.Food;
 import org.prgrms.kyu.repository.FoodRepository;
 import org.prgrms.kyu.repository.StoreRepository;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,9 @@ public class FoodService {
     public List<FoodResponse> getFoodList(Long storeId) {
         return foodRepository.findAllByStoreIdOrderById(storeId)
                 .stream().map(FoodResponse::new).collect(Collectors.toList());
+    }
+
+    public Food getById(Long foodId){
+        return foodRepository.getById(foodId);
     }
 }

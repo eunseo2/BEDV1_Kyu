@@ -33,22 +33,21 @@ class StoreServiceTest {
 
   @Spy
   @InjectMocks
-  StoreService storeService;
+  private StoreService storeService;
 
   @Mock
-  StoreRepository storeRepository;
-
-
-  @Mock
-  UserService userService;
+  private StoreRepository storeRepository;
 
   @Mock
-  UserRepository userRepository;
+  private UserService userService;
 
-  Long fakeUserId =  1L;
-  long fakeStoreId = 1L;
-  User saveUser;
-  Store saveStore;
+  @Mock
+  private UserRepository userRepository;
+
+  private Long fakeUserId =  1L;
+  private long fakeStoreId = 1L;
+  private User saveUser;
+  private Store saveStore;
 
   @BeforeEach
   public void setUp() throws AuthenticationException {
