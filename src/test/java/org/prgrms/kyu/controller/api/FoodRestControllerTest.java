@@ -28,9 +28,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest(FoodRestController.class)
 @AutoConfigureRestDocs
+@WebMvcTest(FoodRestController.class)
 class FoodRestControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -48,6 +47,7 @@ class FoodRestControllerTest {
                 .name("test name")
                 .description("test description")
                 .price(1000)
+                .image("test image")
                 .build();
 
         given(foodService.save(ArgumentMatchers.any(FoodRequest.class),eq(1L)))
@@ -63,7 +63,8 @@ class FoodRestControllerTest {
                         requestFields(
                                 fieldWithPath("name").type(JsonFieldType.STRING).description("foodName"),
                                 fieldWithPath("description").type(JsonFieldType.STRING).description("foodDescription"),
-                                fieldWithPath("price").type(JsonFieldType.NUMBER).description("foodPrice")
+                                fieldWithPath("price").type(JsonFieldType.NUMBER).description("foodPrice"),
+                                fieldWithPath("image").type(JsonFieldType.STRING).description("image")
                         ),
                         responseFields(
                                 fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("StatusCode"),
@@ -89,7 +90,7 @@ class FoodRestControllerTest {
         mockMvc.perform(get("/api/v1/stores/{storeId}/foods", 1L))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andDo(document("food-save",
+                .andDo(document("food-list",
                         responseFields(
                                 fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("StatusCode"),
                                 fieldWithPath("serverDateTime").type(JsonFieldType.STRING).description("serverDateTime"),
