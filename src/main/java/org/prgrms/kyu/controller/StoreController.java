@@ -14,21 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
-import lombok.RequiredArgsConstructor;
-import org.prgrms.kyu.dto.StoreCreateRequest;
+
+import org.prgrms.kyu.dto.StoreRequest;
 import org.prgrms.kyu.dto.UserInfo;
 import org.prgrms.kyu.entity.UserType;
 
 import org.prgrms.kyu.service.SecurityService;
-import org.prgrms.kyu.service.StoreService;
-import org.prgrms.kyu.service.UserService;
-import org.springframework.security.core.Authentication;
 
-import org.springframework.security.core.userdetails.UserDetails;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -45,8 +37,10 @@ public class StoreController {
 
     @GetMapping("/stores/{storeId}")
     public String findById(@PathVariable("storeId") Long storeId, Model model,  Authentication authentication) throws NotFoundException {
-        model.addAttribute("userInfo",
-                userService.getUser(((UserDetails) authentication.getPrincipal()).getUsername()));
+        if (securityService.isAuthenticated()) {
+            model.addAttribute("userInfo",
+                    userService.getUser(((UserDetails) authentication.getPrincipal()).getUsername()));
+        }
         model.addAttribute("store", storeService.findById(storeId));
         return "store/detail-view";
     }
@@ -57,7 +51,7 @@ public class StoreController {
     UserType userType = userService.getUserType(
         ((UserDetails) authentication.getPrincipal()).getUsername());
     if(userType.equals(UserType.STORE_OWNER)){
-      model.addAttribute("storeForm", new StoreCreateRequest());
+      model.addAttribute("storeForm", new StoreRequest());
       model.addAttribute("userInfo",
           userService.getUser(((UserDetails) authentication.getPrincipal()).getUsername()));
 
@@ -88,12 +82,12 @@ public class StoreController {
 
 
   @PostMapping("/stores")
-  public String signUp(@ModelAttribute("storeForm") StoreCreateRequest storeCreateRequest,
+  public String signUp(@ModelAttribute("storeForm") StoreRequest storeRequest,
                        Authentication authentication)
       throws AuthenticationException {
     if (!securityService.isAuthenticated()) throw new AuthenticationException();
     final UserInfo userInfo = userService.getUser(authentication.getName());
-    storeService.save(storeCreateRequest, userInfo.getId());
+    storeService.save(storeRequest, userInfo.getId());
     return "redirect:/";
   }
 
