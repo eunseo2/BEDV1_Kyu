@@ -87,6 +87,7 @@ class StoreRestControllerTest {
             "momstouch",
             "01011112222",
             "i am momstouch.",
+            "https://kyu-nation.s3.ap-northeast-2.amazonaws.com/static/1ec58c2b-b52e-4ac4-a44a-5a2795a3b879%ED%9B%84%EB%9D%BC%EC%9D%B4%EB%93%9C.jpg",
             "Seoul");
 
     storeRequest2 =
@@ -94,6 +95,7 @@ class StoreRestControllerTest {
             "momstouch2",
             "01011113333",
             "i am momstouch2.",
+            "https://kyu-nation.s3.ap-northeast-2.amazonaws.com/static/1ec58c2b-b52e-4ac4-a44a-5a2795a3b879%ED%9B%84%EB%9D%BC%EC%9D%B4%EB%93%9C.jpg",
             "Seoul");
 
     given(userService.join(ArgumentMatchers.any(JoinRequest.class))).willReturn(1L);
@@ -124,6 +126,7 @@ class StoreRestControllerTest {
                 fieldWithPath("name").type(JsonFieldType.STRING).description("name"),
                 fieldWithPath("telephone").type(JsonFieldType.STRING).description("telephone"),
                 fieldWithPath("description").type(JsonFieldType.STRING).description("description"),
+                fieldWithPath("image").type(JsonFieldType.STRING).description("image"),
                 fieldWithPath("location").type(JsonFieldType.STRING).description("location")
             ),
             responseFields(
@@ -149,6 +152,7 @@ class StoreRestControllerTest {
             storeRequest.getName(),
             storeRequest.getTelephone(),
             storeRequest.getDescription(),
+            storeRequest.getImage(),
             storeRequest.getLocation()
         ),
         new StoreResponse(
@@ -156,6 +160,7 @@ class StoreRestControllerTest {
             storeRequest2.getName(),
             storeRequest2.getTelephone(),
             storeRequest2.getDescription(),
+            storeRequest.getImage(),
             storeRequest2.getLocation()
         ));
 
@@ -180,6 +185,7 @@ class StoreRestControllerTest {
                 fieldWithPath("data[].name").type(JsonFieldType.STRING).description("name"),
                 fieldWithPath("data[].telephone").type(JsonFieldType.STRING).description("telephone"),
                 fieldWithPath("data[].description").type(JsonFieldType.STRING).description("description"),
+                fieldWithPath("data[].image").type(JsonFieldType.STRING).description("image"),
                 fieldWithPath("data[].location").type(JsonFieldType.STRING).description("location")
             )
         ));
@@ -200,6 +206,7 @@ class StoreRestControllerTest {
         storeRequest.getName(),
         storeRequest.getTelephone(),
         storeRequest.getDescription(),
+        storeRequest.getImage(),
         storeRequest.getLocation()
     );
 
@@ -223,6 +230,7 @@ class StoreRestControllerTest {
                 fieldWithPath("data.name").type(JsonFieldType.STRING).description("name"),
                 fieldWithPath("data.telephone").type(JsonFieldType.STRING).description("telephone"),
                 fieldWithPath("data.description").type(JsonFieldType.STRING).description("description"),
+                fieldWithPath("data[].image").type(JsonFieldType.STRING).description("image"),
                 fieldWithPath("data.location").type(JsonFieldType.STRING).description("location")
             )
         ));

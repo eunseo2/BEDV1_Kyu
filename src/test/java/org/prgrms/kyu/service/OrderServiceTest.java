@@ -10,13 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.prgrms.kyu.dto.FoodRequest;
 import org.prgrms.kyu.dto.JoinRequest;
-import org.prgrms.kyu.dto.OrderRequest;
 import org.prgrms.kyu.dto.OrderFoodRequest;
-import org.prgrms.kyu.dto.StoreFindResponse;
+import org.prgrms.kyu.dto.OrderRequest;
+import org.prgrms.kyu.dto.StoreResponse;
 import org.prgrms.kyu.entity.Food;
 import org.prgrms.kyu.entity.Order;
 import org.prgrms.kyu.entity.Store;
@@ -76,7 +75,7 @@ public class OrderServiceTest {
         .build();
     saveFood = FoodRequest.convertToFood(foodRequest);
     saveFood.update(saveStore);
-    StoreFindResponse storeFindResponse = new StoreFindResponse(saveStore);
+    StoreResponse storeResponse = new StoreResponse(saveStore);
 
     OrderRequest orderRequest = new OrderRequest(
         "배달해주세요",
@@ -87,7 +86,7 @@ public class OrderServiceTest {
     saveOrder = orderRequest.convertToOrder(saveUser,saveStore);
 
     given(userService.findById(any())).willReturn(saveUser);
-    doReturn(storeFindResponse).when(storeService).findById(fakeStoreId);
+    doReturn(storeResponse).when(storeService).findById(fakeStoreId);
     given(orderRepository.save(any())).willReturn(saveOrder);
     given(orderFoodService.save(any(),any())).willReturn(fakeOrderFoodId);
 

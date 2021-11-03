@@ -1,18 +1,14 @@
 package org.prgrms.kyu.controller.api;
 
-import java.util.List;
 import javassist.NotFoundException;
 import javax.naming.AuthenticationException;
 import lombok.RequiredArgsConstructor;
 import org.prgrms.kyu.ApiResponse;
 import org.prgrms.kyu.dto.OrderRequest;
-import org.prgrms.kyu.dto.StoreCreateRequest;
-import org.prgrms.kyu.dto.StoreFindResponse;
 import org.prgrms.kyu.service.OrderService;
 import org.prgrms.kyu.service.SecurityService;
 import org.prgrms.kyu.service.UserService;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

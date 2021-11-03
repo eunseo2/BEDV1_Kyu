@@ -4,12 +4,11 @@ import javassist.NotFoundException;
 import javax.naming.AuthenticationException;
 import lombok.RequiredArgsConstructor;
 import org.prgrms.kyu.dto.OrderRequest;
-import org.prgrms.kyu.dto.StoreFindResponse;
+import org.prgrms.kyu.dto.StoreResponse;
 import org.prgrms.kyu.entity.Order;
 import org.prgrms.kyu.entity.Store;
 import org.prgrms.kyu.entity.User;
 import org.prgrms.kyu.repository.OrderRepository;
-import org.prgrms.kyu.repository.StoreRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +30,7 @@ public class OrderService {
   public Long save(OrderRequest orderRequest, Long userId, Long storeId)
       throws AuthenticationException, NotFoundException {
     User user = userService.findById(userId);
-    StoreFindResponse storeRequest = storeService.findById(storeId);
+    StoreResponse storeRequest = storeService.findById(storeId);
     Store store = storeRequest.convertToStore();
     Order order = orderRequest.convertToOrder(
         user,

@@ -14,8 +14,8 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.prgrms.kyu.dto.JoinRequest;
-import org.prgrms.kyu.dto.StoreCreateRequest;
-import org.prgrms.kyu.dto.StoreFindResponse;
+import org.prgrms.kyu.dto.StoreRequest;
+import org.prgrms.kyu.dto.StoreResponse;
 import org.prgrms.kyu.entity.Store;
 import org.prgrms.kyu.entity.User;
 import org.prgrms.kyu.repository.StoreRepository;
@@ -62,19 +62,20 @@ class StoreServiceTest {
     saveUser = new User(joinRequest);
 
 
-    StoreCreateRequest storeCreateRequest = new StoreCreateRequest(
+    StoreRequest storeRequest = new StoreRequest(
         "맘스터치",
         "01011112222",
         "맘스터치입니다.",
+        "https://kyu-nation.s3.ap-northeast-2.amazonaws.com/static/1ec58c2b-b52e-4ac4-a44a-5a2795a3b879%ED%9B%84%EB%9D%BC%EC%9D%B4%EB%93%9C.jpg",
         "Seoul");
-    saveStore = storeCreateRequest.convertToStore(saveUser);
+    saveStore = storeRequest.convertToStore(saveUser);
 
     given(userRepository.save(any())).willReturn(saveUser);
     given(storeRepository.save(any())).willReturn(saveStore);
 
     //when
     userRepository.save(saveUser);
-    storeService.save(storeCreateRequest,fakeUserId);
+    storeService.save(storeRequest,fakeUserId);
 
   }
 
@@ -99,18 +100,18 @@ class StoreServiceTest {
   @DisplayName("id로 음식점을 찾을 수 있다.")
   public void findByIdTest() throws NotFoundException {
     //given
-    StoreFindResponse storeFindResponse = new StoreFindResponse(saveStore);
+    StoreResponse storeResponse = new StoreResponse(saveStore);
     given(storeRepository.findById(fakeStoreId)).willReturn(Optional.ofNullable(saveStore));
-    doReturn(storeFindResponse).when(storeService).findById(fakeStoreId);
+    doReturn(storeResponse).when(storeService).findById(fakeStoreId);
 
     //when
-    StoreFindResponse findStore = storeService.findById(fakeStoreId);
+    StoreResponse findStore = storeService.findById(fakeStoreId);
 
     //then
     Optional<Store> store = storeRepository.findById(fakeStoreId);
     assertThat(findStore,allOf(
         notNullValue(),
-        samePropertyValuesAs(new StoreFindResponse(store.get()))));
+        samePropertyValuesAs(new StoreResponse(store.get()))));
   }
 
 
@@ -121,10 +122,11 @@ class StoreServiceTest {
     //given
 
     Long fakeStoreId = 2L;
-    StoreCreateRequest storeCreateRequest = new StoreCreateRequest(
+    StoreRequest storeCreateRequest = new StoreRequest(
         "맘스터치",
         "01011112222",
         "맘스터치입니다.",
+        "https://kyu-nation.s3.ap-northeast-2.amazonaws.com/static/1ec58c2b-b52e-4ac4-a44a-5a2795a3b879%ED%9B%84%EB%9D%BC%EC%9D%B4%EB%93%9C.jpg",
         "Seoul");
 
     Store saveStore2 = storeCreateRequest.convertToStore(saveUser);
@@ -132,17 +134,17 @@ class StoreServiceTest {
     storeService.save(storeCreateRequest,fakeUserId);
 
 
-    StoreFindResponse storeFindResponse = new StoreFindResponse(saveStore);
-    StoreFindResponse storeFindResponse2 = new StoreFindResponse(saveStore2);
+    StoreResponse storeFindResponse = new StoreResponse(saveStore);
+    StoreResponse storeFindResponse2 = new StoreResponse(saveStore2);
     doReturn(List.of(storeFindResponse, storeFindResponse2)).when(storeService).findAll();
     given(storeRepository.findAll()).willReturn(List.of(saveStore, saveStore2));
 
     //when
-    List<StoreFindResponse> all = storeService.findAll();
+    List<StoreResponse> all = storeService.findAll();
 
     //then
-    List<StoreFindResponse> findAll = storeRepository.findAll().stream()
-        .map((StoreFindResponse::new))
+    List<StoreResponse> findAll = storeRepository.findAll().stream()
+        .map((StoreResponse::new))
         .collect(Collectors.toList());
 
     assertThat(all,allOf(
