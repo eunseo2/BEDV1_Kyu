@@ -1,10 +1,14 @@
 package org.prgrms.kyu.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Builder
+@AllArgsConstructor
 @Entity
 @Table(name = "OrderFoods")
 @Getter
