@@ -74,11 +74,6 @@ class FoodServiceTest {
                 .willReturn(List.of(this.food));
     }
 
-    @AfterEach
-    void tearDown() {
-        foodRepository.deleteAll();
-    }
-
     @Test
     void save() {
         //Given

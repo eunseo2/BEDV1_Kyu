@@ -58,13 +58,6 @@ class StoreRestControllerTest {
   @MockBean
   SecurityService securityService;
 
-  @AfterEach
-  public void cleanUp(){
-    storeService.deleteAll();
-    userRepository.deleteAll();
-  }
-
-
   Long userId;
   JoinRequest form;
   StoreRequest storeRequest;
@@ -230,7 +223,7 @@ class StoreRestControllerTest {
                 fieldWithPath("data.name").type(JsonFieldType.STRING).description("name"),
                 fieldWithPath("data.telephone").type(JsonFieldType.STRING).description("telephone"),
                 fieldWithPath("data.description").type(JsonFieldType.STRING).description("description"),
-                fieldWithPath("data[].image").type(JsonFieldType.STRING).description("image"),
+                fieldWithPath("data.image").type(JsonFieldType.STRING).description("image"),
                 fieldWithPath("data.location").type(JsonFieldType.STRING).description("location")
             )
         ));

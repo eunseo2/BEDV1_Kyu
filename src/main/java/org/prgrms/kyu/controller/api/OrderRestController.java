@@ -25,7 +25,7 @@ public class OrderRestController {
   private final UserService userService;
 
   @PostMapping("stores/{storeId}/orders")
-  public ApiResponse<Long> saveStore(@RequestBody OrderRequest orderRequest,@PathVariable Long storeId, Authentication authentication)
+  public ApiResponse<Long> saveOrder(@RequestBody OrderRequest orderRequest,@PathVariable Long storeId, Authentication authentication)
       throws AuthenticationException, NotFoundException {
     if (!securityService.isAuthenticated()) throw new AuthenticationException();
     return ApiResponse.ok(orderService.save(orderRequest,
