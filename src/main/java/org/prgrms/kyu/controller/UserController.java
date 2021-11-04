@@ -34,6 +34,11 @@ public class UserController {
         return "index";
     }
 
+    @GetMapping("/docs")
+    public String docs() {
+        return "docs";
+    }
+
     @GetMapping("/user/signup")
     public String signUp(Model model) {
         if (securityService.isAuthenticated()) return "redirect:/";
