@@ -55,11 +55,11 @@ public class StoreController {
       model.addAttribute("userInfo",
           userService.getUser(((UserDetails) authentication.getPrincipal()).getUsername()));
 
-      return "/store/my-store";
+      return "store/my-store";
     }else if(userType.equals(UserType.CUSTOMER)){
-      return "/index";
+      return "index";
     }
-    return "/user/loginForm";
+    return "user/loginForm";
   }
 
   @GetMapping("/user/stores")
@@ -75,9 +75,9 @@ public class StoreController {
       model.addAttribute("stores", storeService.findByUserId(user.getId()));
       return "/store/myStoreListView";
     }else if(userType.equals(UserType.CUSTOMER)){
-      return "/index";
+      return "index";
     }
-    return "/user/loginForm";
+    return "user/loginForm";
   }
 
 
