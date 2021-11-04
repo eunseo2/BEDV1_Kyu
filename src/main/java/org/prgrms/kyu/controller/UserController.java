@@ -31,14 +31,14 @@ public class UserController {
                              userService.getUser(((UserDetails) authentication.getPrincipal()).getUsername()));
         }
         model.addAttribute("stores",storeService.findAll());
-        return "/index";
+        return "index";
     }
 
     @GetMapping("/user/signup")
     public String signUp(Model model) {
         if (securityService.isAuthenticated()) return "redirect:/";
         model.addAttribute("joinForm", new JoinRequest());
-        return "/user/signUpForm";
+        return "user/signUpForm";
     }
 
     @PostMapping("/user/signup")
@@ -52,7 +52,7 @@ public class UserController {
     public String login(Model model, String logout) {
         if (securityService.isAuthenticated()) return "redirect:/";
         if (logout != null) model.addAttribute("message", "안전하게 로그아웃되었습니다.");
-        return "/user/loginForm";
+        return "user/loginForm";
     }
 
 }
