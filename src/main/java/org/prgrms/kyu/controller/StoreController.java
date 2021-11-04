@@ -73,7 +73,7 @@ public class StoreController {
       model.addAttribute("userInfo",
           user);
       model.addAttribute("stores", storeService.findByUserId(user.getId()));
-      return "/store/myStoreListView";
+      return "store/myStoreListView";
     }else if(userType.equals(UserType.CUSTOMER)){
       return "index";
     }
