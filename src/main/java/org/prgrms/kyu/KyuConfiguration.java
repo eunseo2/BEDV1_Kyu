@@ -29,6 +29,7 @@ public class KyuConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
     public AuthenticationManager customAuthenticationManager() throws Exception {
         return authenticationManager();

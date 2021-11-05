@@ -1,9 +1,6 @@
 package org.prgrms.kyu.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.prgrms.kyu.entity.Food;
 import org.prgrms.kyu.entity.Order;
 import org.prgrms.kyu.entity.OrderFood;
@@ -14,6 +11,7 @@ import org.prgrms.kyu.entity.User;
 @Setter
 @Getter
 @AllArgsConstructor
+@Builder
 @NoArgsConstructor
 public class OrderRequest {
 

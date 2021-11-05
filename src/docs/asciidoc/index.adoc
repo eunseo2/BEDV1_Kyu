@@ -3,14 +3,11 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
-
-
 == 뀨의 민족
 
+=== 모든 음식점 조회
 
-=== 음식점 조회
-
-=== /stores/
+=== /api/v1/stores
 
 .Request
 include::{snippets}/store-find-all/http-request.adoc[]
@@ -20,9 +17,9 @@ include::{snippets}/store-find-all/response-fields.adoc[]
 include::{snippets}/store-find-all/http-response.adoc[]
 include::{snippets}/store-find-all/response-fields.adoc[]
 
-=== 음식점 id 조회
+=== 음식점 하나 조회
 
-=== /stores/{id}
+=== /api/v1/stores/{id}
 
 .Request
 include::{snippets}/store-find-by-id/http-request.adoc[]
@@ -32,9 +29,9 @@ include::{snippets}/store-find-by-id/response-fields.adoc[]
 include::{snippets}/store-find-by-id/http-response.adoc[]
 include::{snippets}/store-find-by-id/response-fields.adoc[]
 
-=== 음식점 생성
+=== 음식점 등록
 
-=== /stores/
+=== /api/v1/stores
 
 .Request
 include::{snippets}/store-save/http-request.adoc[]
@@ -57,3 +54,27 @@ include::{snippets}/food-save/request-fields.adoc[]
 include::{snippets}/food-save/http-response.adoc[]
 include::{snippets}/food-save/response-fields.adoc[]
 
+=== 가게 모든 음식 조회
+
+=== /api/v1/stores/{storeId}/foods
+
+.Request
+include::{snippets}/food-list/http-request.adoc[]
+include::{snippets}/food-list/request-fields.adoc[]
+
+.Response
+include::{snippets}/food-list/http-response.adoc[]
+include::{snippets}/food-list/response-fields.adoc[]
+
+
+=== 주문 등록
+
+=== /api/v1/stores/{storeId}/orders
+
+.Request
+include::{snippets}/order-save/http-request.adoc[]
+include::{snippets}/order-save/request-fields.adoc[]
+
+.Response
+include::{snippets}/order-save/http-response.adoc[]
+include::{snippets}/order-save/response-fields.adoc[]
