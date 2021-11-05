@@ -43,11 +43,11 @@ public class OrderController {
       model.addAttribute("foodId",1);
       model.addAttribute("quantity",1);
       model.addAttribute("price",10000);
-      return "/order/new-order";
+      return "order/new-order";
     }else if(userType.equals(UserType.STORE_OWNER)){
       return "redirect:/";
     }
-    return "/user/loginForm";
+    return "user/loginForm";
   }
 
   @PostMapping("/stores/{storeId}/orders")
@@ -74,11 +74,11 @@ public class OrderController {
       model.addAttribute("storeId", storeId);
       model.addAttribute("orderForm", new OrderRequest());
       model.addAttribute("orderFoods", orderFoodRequest);
-      return "/order/new-order";
+      return "order/new-order";
     }else if(userType.equals(UserType.STORE_OWNER)){
       return "redirect:/";
     }
-    return "/user/loginForm";
+    return "user/loginForm";
   }
 
 }
