@@ -60,7 +60,6 @@ include::{snippets}/food-save/response-fields.adoc[]
 
 .Request
 include::{snippets}/food-list/http-request.adoc[]
-include::{snippets}/food-list/request-fields.adoc[]
 
 .Response
 include::{snippets}/food-list/http-response.adoc[]
