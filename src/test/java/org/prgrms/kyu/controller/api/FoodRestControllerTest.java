@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
+import org.prgrms.kyu.commons.S3Uploader;
 import org.prgrms.kyu.dto.FoodRequest;
 import org.prgrms.kyu.dto.FoodResponse;
 import org.prgrms.kyu.entity.Food;
@@ -39,6 +40,9 @@ class FoodRestControllerTest {
 
     @MockBean
     private FoodService foodService;
+
+    @MockBean
+    private S3Uploader s3Uploader;
 
     @Test
     public void save() throws Exception {

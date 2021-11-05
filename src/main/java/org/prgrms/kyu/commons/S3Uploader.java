@@ -3,7 +3,7 @@ package org.prgrms.kyu.commons;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,15 +16,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
+@RequiredArgsConstructor
 @Component
-@NoArgsConstructor
 public class S3Uploader {
 
-    private AmazonS3Client amazonS3Client;
-
-    public S3Uploader(AmazonS3Client amazonS3Client) {
-        this.amazonS3Client = amazonS3Client;
-    }
+    private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
     public String bucket;  // S3 버킷 이름

@@ -1,6 +1,5 @@
 package org.prgrms.kyu;
 
-import org.prgrms.kyu.commons.S3Uploader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,9 +19,6 @@ public class KyuConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     UserDetailsService userDetailsService;
 
-    @Autowired
-    S3Uploader s3Uploader;
-
     @Bean
     public UserDetailsService userDetailsService() {
         return super.userDetailsService();
@@ -31,11 +27,6 @@ public class KyuConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public S3Uploader s3Uploaders(){
-        return new S3Uploader();
     }
 
     @Bean
