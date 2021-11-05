@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="theme-color" content="#7952b3">
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link href="/css/headers.css" rel="stylesheet">
+  <link href="/css/features.css" rel="stylesheet">
+  <title>뀨의 민족</title>
+</head>
+<body>
+<header class="p-3 bg-dark text-white">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+        <h2 style="color:white">뀨의 민족</h2>
+      </a>
+      &nbsp&nbsp&nbsp&nbsp&nbsp
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
+        <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
+        <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+        <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+      </ul>
+
+      <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+        <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+      </form>
+
+      <div sec:authorize="isAnonymous()" class="text-end">
+        <button class="btn btn-outline-light me-2" type="button" th:onclick="'location.href=\'/user/login\';'">Login</button>
+        <button class="btn btn-outline-light me-2" type="button" th:onclick="'location.href=\'/user/signup\';'">Sign-up</button>
+      </div>
+      <div sec:authorize="isAuthenticated()" class="text-end">
+        <form id="logoutForm" method="POST" th:action="@{/logout}">
+          <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        </form>
+        <b><span th:text="${userInfo.getNickname()}" style="color: white"></span></b>님, 반갑습니다. &nbsp
+        <button th:onclick="'location.href=\'/user/logout\';'" type="button" class="btn btn-outline-light me-2">Logout</button>
+        <button sec:authorize="hasAuthority('CUSTOMER')" th:href="@{/}" type="button" class="btn btn-outline-light me-2">주문 목록</button>
+        <button sec:authorize="hasAuthority('STORE_OWNER')" th:onclick="'location.href=\'/user/myStore\';'" type="button" class="btn btn-outline-light me-2">내 가게 등록</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container px-4 py-5" id="custom-cards">
+    <h2 class="pb-2 border-bottom">내 가게 목록</h2>
+
+    <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+
+
+      <div class="col" th:each="store: ${stores}" th:object="${store}">
+        <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('https://getbootstrap.com/docs/5.1/examples/features/unsplash-photo-1.jpg');">
+          <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold" th:text="${store.name}">가게 이름</h2>
+            <ul class="d-flex list-unstyled mt-auto">
+              <li class="d-flex align-items-center me-3">
+                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+                <small th:text="${store.description}">Earth</small>
+              </li>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+</html>
