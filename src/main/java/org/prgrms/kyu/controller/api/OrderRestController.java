@@ -4,6 +4,7 @@ import javassist.NotFoundException;
 import javax.naming.AuthenticationException;
 import lombok.RequiredArgsConstructor;
 import org.prgrms.kyu.ApiResponse;
+import org.prgrms.kyu.dto.OrderFoodRequest;
 import org.prgrms.kyu.dto.OrderRequest;
 import org.prgrms.kyu.service.OrderService;
 import org.prgrms.kyu.service.SecurityService;
