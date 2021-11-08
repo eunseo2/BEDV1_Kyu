@@ -24,37 +24,32 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class OrderService {
 
-  private final OrderRepository orderRepository;
-  private final OrderFoodService orderFoodService;
-  private final UserService userService;
-  private final StoreService storeService;
+    private final OrderRepository orderRepository;
+    private final OrderFoodService orderFoodService;
+    private final UserService userService;
+    private final StoreRepository storeRepository;
 
-  private final StoreRepository storeRepository;
-  private final OrderFoodRepository orderFoodRepository;
-  private final FoodRepository foodRepository;
+    public Order getById(Long orderId) {
+        return orderRepository.getById(orderId);
+    }
 
+    @Transactional
+    public Long save(OrderRequest orderRequest, Long userId, Long storeId)
+            throws AuthenticationException, NotFoundException {
+        User user = userService.findById(userId);
 
-  public Order getById(Long orderId) {
-    return orderRepository.getById(orderId);
-  }
+        Order order = orderRequest.convertToOrder(
+                user
+        );
 
-  @Transactional
-  public Long save(OrderRequest orderRequest, Long userId, Long storeId)
-      throws AuthenticationException, NotFoundException {
-    User user = userService.findById(userId);
-    StoreResponse storeRequest = storeService.findById(storeId);
-    Store store = storeRequest.convertToStore();
-    Order order = orderRequest.convertToOrder(
-        user,
-        store
-    );
+        Long orderId = orderRepository.save(order).getId();
 
-    Long orderId = orderRepository.save(order).getId();
+        orderFoodService.save(orderRequest.getOrderFood(), getById(orderId));
 
-    orderFoodService.save(orderRequest.getOrderFood(), getById(orderId));
-    return orderId;
-  }
+        Store store = storeRepository.getById(storeId);
+        store.update(order);
 
-
+        return orderId;
+    }
 
 }

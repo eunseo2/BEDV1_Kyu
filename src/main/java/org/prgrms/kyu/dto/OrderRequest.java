@@ -19,14 +19,13 @@ public class OrderRequest {
   String phoneNumber;
   OrderFoodRequest orderFood;
 
-  public Order convertToOrder(User customer, Store store) {
+  public Order convertToOrder(User customer) {
     return Order.builder()
         .address(this.address)
         .orderStatus(OrderStatus.PAYMENT_CONFIRMED)
         .phoneNumber(this.phoneNumber)
         .totalAmount(this.orderFood.getQuantity() * this.orderFood.getPrice())
         .customer(customer)
-        .store(store)
         .build();
   }
 }
