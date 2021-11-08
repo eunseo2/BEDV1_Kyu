@@ -35,8 +35,4 @@ public class Order extends BaseTimeEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id", referencedColumnName = "id")
-    private Store store;
-
 }
