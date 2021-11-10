@@ -99,6 +99,7 @@ class FoodRestControllerTest {
                                 fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("StatusCode"),
                                 fieldWithPath("serverDateTime").type(JsonFieldType.STRING).description("serverDateTime"),
                                 fieldWithPath("data").type(JsonFieldType.ARRAY).description("List<FoodResponse>"),
+                                fieldWithPath("data.[].id").type(JsonFieldType.NULL).description("Food Id"),
                                 fieldWithPath("data.[].name").type(JsonFieldType.STRING).description("Food Name"),
                                 fieldWithPath("data.[].description").type(JsonFieldType.STRING).description("Food Description"),
                                 fieldWithPath("data.[].price").type(JsonFieldType.NUMBER).description("Food Price"),
