@@ -1,0 +1,37 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+        shell: bash
+
+      - name: Build with Gradle
+        run: ./gradlew clean build
+        shell: bash
+
+        env:
+          DB_HOST: ${{secrets.DB_HOST}}
+          DB_USER: ${{secrets.DB_USER}}
+          DB_PW: ${{secrets.DB_PW}}
+          ACCESS_KEY: ${{secrets.ACCESS_KEY}}
+          SECRET_KEY: ${{secrets.SECRET_KEY}}
+          BUCKET_NAME: ${{secrets.BUCKET_NAME}}
+          AWS_REGION: ${{secrets.AWS_REGION}}
