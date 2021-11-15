@@ -20,12 +20,11 @@ jobs:
           java-version: '11'
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
-        shell: bash
+        run: chmod +x gradlew
+
 
       - name: Build with Gradle
         run: ./gradlew clean build
-        shell: bash
 
         env:
           DB_HOST: ${{secrets.DB_HOST}}
@@ -35,3 +34,43 @@ jobs:
           SECRET_KEY: ${{secrets.SECRET_KEY}}
           BUCKET_NAME: ${{secrets.BUCKET_NAME}}
           AWS_REGION: ${{secrets.AWS_REGION}}
+
+
+      # 전송할 파일을 담을 디렉토리 생성
+      - name: Make Directory for deliver
+        run: mkdir deploy
+
+      # Jar 파일 Copy
+      - name: Copy Jar
+        run: cp build/libs/*.jar deploy/
+
+      # Procfile deploy/Procfile
+      - name: Procfile deploy/Procfile
+        run: cp Procfile deploy/Procfile
+
+      # ebextensions deploy
+      - name: ebextensions deploy
+        run:  cp -r .ebextensions deploy/.ebextensions
+
+      # platform deploy
+      - name: platform deploy
+        run: cp -r .platform deploy/.platform
+
+      #  Generate deployment package
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x '*.git*'
+
+      # deploy.zip
+      - name: Procfile deploy/Procfile
+        run: cd deploy && zip -r deploy.zip .
+
+      - name: Beanstalk Deploy
+        uses: einaregilsson/beanstalk-deploy@v18
+        with:
+          aws_access_key: ${{secrets.ACCESS_KEY}}
+          aws_secret_key: ${{secrets.SECRET_KEY}}
+          application_name: kyu-nation
+          environment_name: Kyunation-env
+          version_label: 12345
+          region: ap-northeast-2
+
